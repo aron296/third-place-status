@@ -1,31 +1,48 @@
-# Change these first
-owner: upptime # Your GitHub organization or username, where this repository lives
-repo: upptime # The name of this repository
+# Upptime voor Third Place — elke 5 minuten een controle.
+# Gaat iets plat, dan opent Upptime een issue in deze repo en mailt GitHub Henk.
+owner: aron296
+repo: third-place-status
 
 sites:
-  - name: Google
-    url: https://www.google.com
-  - name: Wikipedia
-    url: https://en.wikipedia.org
-  - name: Hacker News
-    url: https://news.ycombinator.com
-  - name: Secret Site
-    url: $SECRET_SITE
+  - name: Site (home)
+    url: https://society.thirdplacerotterdam.nl/
+  - name: Zaalverhuur (/the-place)
+    url: https://society.thirdplacerotterdam.nl/the-place
+  - name: Offertepagina
+    url: https://society.thirdplacerotterdam.nl/verhuur/betalen/proef
+  # Stripe-webhook: zonder handtekening antwoordt hij 400. Dat betekent: hij draait.
+  - name: Betalingen (Stripe-webhook)
+    url: https://urhhdbjctoygohagdiqj.supabase.co/functions/v1/stripe-webhook
+    expectedStatusCodes:
+      - 400
+  # Akkoordfunctie: met een nep-token antwoordt hij 404 met deze zin. Dan draait hij.
+  - name: Akkoord op offertes
+    url: https://urhhdbjctoygohagdiqj.supabase.co/functions/v1/verhuur-betalen
+    method: POST
+    headers:
+      - "Content-Type: application/json"
+    body: '{"token":"x","action":"info"}'
+    expectedStatusCodes:
+      - 404
+    __dangerous__body_down_if_text_missing: "Deze link klopt niet"
+
+assignees:
+  - aron296
 
 status-website:
-  # Add your custom domain name, or remove the `cname` line if you don't have a domain
-  # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
-  cname: demo.upptime.js.org
-  # baseUrl: /your-repo-name
-  logoUrl: https://raw.githubusercontent.com/upptime/upptime.js.org/master/static/img/icon.svg
-  name: Upptime
-  introTitle: "**Upptime** is the open-source uptime monitor and status page, powered entirely by GitHub."
-  introMessage: This is a sample status page which uses **real-time** data from our [GitHub repository](https://github.com/upptime/upptime). No server required — just GitHub Actions, Issues, and Pages. [**Get your own for free**](https://github.com/upptime/upptime)
+  baseUrl: /third-place-status
+  logoUrl: https://society.thirdplacerotterdam.nl/email/tps-woordmerk-zwart.png
+  name: Third Place status
   navbar:
     - title: Status
       href: /
-    - title: GitHub
-      href: https://github.com/$OWNER/$REPO
+    - title: Third Place
+      href: https://society.thirdplacerotterdam.nl
+  introTitle: "Draait alles?"
+  introMessage: "Elke 5 minuten gecontroleerd: de site, de zaalverhuur, het betalen en het akkoord op offertes."
+  theme: dark
 
-# Upptime also supports notifications, assigning issues, and more
-# See https://upptime.js.org/docs/configuration
+i18n:
+  up: "Werkt"
+  down: "Plat"
+  degraded: "Traag"
